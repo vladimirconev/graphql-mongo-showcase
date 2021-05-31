@@ -1,6 +1,7 @@
 package com.example.graphqlshowcase.adapter.out;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -55,6 +56,9 @@ public class MongoBookRepository implements BookRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(id));
 		var bookMongoDto = mongoOperations.findOne(query, BookMongoDto.class, BOOKS_COLLECTION_NAME);
+		if(bookMongoDto == null) {
+			throw new NoSuchElementException(String.format("Book with ID: %s is Not found.", id));
+		}
 		return BookDbMapper.mapBookMongoDtoToBook(bookMongoDto);
 	}
 

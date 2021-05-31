@@ -16,20 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.graphqlshowcase.adapter.in.dto.request.CreateBookRequestDto;
 import com.example.graphqlshowcase.adapter.in.dto.request.UpdateBookRequestDto;
 import com.example.graphqlshowcase.adapter.in.dto.response.BookResponseDto;
+import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponseDto;
 import com.example.graphqlshowcase.domain.BookDomainService;
-import com.example.graphqlshowcase.domain.entity.Book;
 import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @Validated
 @RequiredArgsConstructor
+@Api(tags = {"Books"},value = "/books")
 public class BookRestController {
 	
 	private final BookDomainService bookService;
 
+	@ApiOperation(value = "Retrieve a book by ID", tags = { "Books" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = BookResponseDto.class),
+			@ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
+			@ApiResponse(code = 404, message = "Not found", response = ErrorResponseDto.class),
+			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class) })
 	@GetMapping(path = "/books/{bookId}")
 	public ResponseEntity<BookResponseDto> retieveBookByIsbn(
 			final @PathVariable("bookId") String bookId) {
@@ -37,10 +47,16 @@ public class BookRestController {
 		return new ResponseEntity<>(BookRestMapper.mapBookToBookResponseDto(result),
 				HttpStatus.OK);
 	}
-
+	
+	
+	@ApiOperation(value = "Creates a book", tags = { "Books" })
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = BookResponseDto.class),
+			@ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
+			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class) })
 	@PostMapping(path = "/books", produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BookResponseDto> createBook(final @RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
+	public ResponseEntity<BookResponseDto> createBook(final @RequestBody
+			@Valid CreateBookRequestDto createBookRequestDto) {
 		var authors = BookRestMapper.mapAuthorRequestDtosToAuthors(createBookRequestDto.getAuthors());
 		var createdBook = bookService.createBook(new ISBN(createBookRequestDto.getIsbn()),
 				Genre.valueOf(createBookRequestDto.getGenre()),
@@ -49,8 +65,16 @@ public class BookRestController {
 		var output = BookRestMapper.mapBookToBookResponseDto(createdBook);
 		return new ResponseEntity<BookResponseDto>(output, HttpStatus.CREATED);
 	}
-
-	@PutMapping(path = "/books", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	
+	
+	@ApiOperation(value = "Update a book info", tags = { "Books" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Updated", response = BookResponseDto.class),
+			@ApiResponse(code = 422, message = "Unprocessable Entity"),
+			@ApiResponse(code = 404, message = "Not found", response = ErrorResponseDto.class),
+			@ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
+			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class) })
+	@PutMapping(path = "/books", produces = MediaType.APPLICATION_JSON_VALUE, 
+			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BookResponseDto> updateBook(
 			final @RequestBody @Valid UpdateBookRequestDto updateBookRequestDto) {
 		var book = BookRestMapper.mapUpdateBookRequestDtoToBook(updateBookRequestDto);
