@@ -1,0 +1,33 @@
+schema {
+	query: GetAllBooks
+
+}
+type GetAllBooks {
+	books(size:Int!, offset:Int!) : Page 
+}
+
+type Page {
+	total: Int!
+	content: [Book]
+}
+
+type Book {
+	isbn: String!
+	title: String!
+	genre: String!
+	publisher: Publisher
+}
+
+type Publisher {
+	name: String
+	address: Address
+}
+
+type Address {
+	city: String
+	state: String
+	street: String
+	houseNumber: String
+	zipCode: String
+
+}

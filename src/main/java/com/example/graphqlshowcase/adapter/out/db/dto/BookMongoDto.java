@@ -1,6 +1,7 @@
 package com.example.graphqlshowcase.adapter.out.db.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -32,6 +33,10 @@ public class BookMongoDto implements Serializable {
 	private Set<AuthorMongoDto> authors;
 	
 	private PublisherMongoDto publisher;
+	
+	private LocalDateTime creationDate;
+	  
+	private LocalDateTime lastUpdateDate;
 	
 
 }

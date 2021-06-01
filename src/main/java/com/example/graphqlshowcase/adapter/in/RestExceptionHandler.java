@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -124,6 +125,13 @@ public class RestExceptionHandler {
 	protected ResponseEntity<String> handleNoSuchElementException(final NoSuchElementException ex,
 			final WebRequest webRequest) {
 		return handleException(ex, HttpStatus.NOT_FOUND, webRequest, ex.getMessage());
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	protected ResponseEntity<String> handleNMethodArgumentNotValidException(final MethodArgumentNotValidException ex,
+			final WebRequest webRequest) {
+		return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
 	}
 	
 	@ResponseBody

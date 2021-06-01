@@ -16,5 +16,7 @@ public interface BookRepository {
 	boolean updateBook(final Book book);
 
 	Book retrieveBookById(final String id);
+	
+	void deleteAllBooks();
 
 }

@@ -30,8 +30,8 @@ public class CreateBookRequestDto implements Serializable {
 
 	@NotNull(message = "Genre can not be null.")
 	@Pattern(regexp = "SCI_FI" + "|FANTASY" + "|OTHER" + "|MYSTERY" + "|THRILLER" + "|ROMANCE" + "|WESTERNS"
-			+ "|DYSTOPIANS" + "|CONTEMPORARY", message = "Genre must have one of the following values:" + "SCI_FI"
-					+ "|FANTASY" + "|OTHER" + "|MYSTERY" + "|THRILLER" + "|ROMANCE" + "|WESTERNS" + "|DYSTOPIANS"
+			+ "|DYSTOPIAN" + "|CONTEMPORARY", message = "Genre must have one of the following values:" + "SCI_FI"
+					+ "|FANTASY" + "|OTHER" + "|MYSTERY" + "|THRILLER" + "|ROMANCE" + "|WESTERNS" + "|DYSTOPIAN"
 					+ "|CONTEMPORARY.")
 	private String genre;
 	

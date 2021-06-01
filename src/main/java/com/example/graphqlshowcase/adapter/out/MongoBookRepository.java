@@ -1,5 +1,6 @@
 package com.example.graphqlshowcase.adapter.out;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,7 +34,8 @@ public class MongoBookRepository implements BookRepository {
 			final Publisher publisher) {
 		var bookMongoDto = BookMongoDto.builder().genre(genre.name()).title(title).isbn(isbn.getIsbn())
 		.authors(BookDbMapper.mapAuthorsToAuthorMongoDtos(authors))
-		.publisher(BookDbMapper.mapPublisherToPublisherMongoDto(publisher)).build();
+		.publisher(BookDbMapper.mapPublisherToPublisherMongoDto(publisher))
+		.creationDate(LocalDateTime.now()).build();
 		BookMongoDto savedBookMongoDto = mongoOperations.save(bookMongoDto, BOOKS_COLLECTION_NAME);
 		return BookDbMapper.mapBookMongoDtoToBook(savedBookMongoDto);
 	}
@@ -46,6 +48,7 @@ public class MongoBookRepository implements BookRepository {
 		update.set("isbn", book.getIsbn().getIsbn());
 		update.set("publisher", BookDbMapper.mapPublisherToPublisherMongoDto(book.getPublisher()));
 		update.set("genre", book.getGenre().name());
+		update.set("lastUpdateDate", LocalDateTime.now());
 		UpdateResult updateResult = mongoOperations.updateFirst(
 				new Query().addCriteria(Criteria.where("id").is(book.getId())), update, BookMongoDto.class, BOOKS_COLLECTION_NAME);
 		return updateResult.wasAcknowledged();
@@ -60,6 +63,14 @@ public class MongoBookRepository implements BookRepository {
 			throw new NoSuchElementException(String.format("Book with ID: %s is Not found.", id));
 		}
 		return BookDbMapper.mapBookMongoDtoToBook(bookMongoDto);
+	}
+
+	@Override
+	public void deleteAllBooks() {
+		if (mongoOperations.collectionExists(BOOKS_COLLECTION_NAME)) {
+			mongoOperations.dropCollection(BOOKS_COLLECTION_NAME);
+		}
+
 	}
 
 	
