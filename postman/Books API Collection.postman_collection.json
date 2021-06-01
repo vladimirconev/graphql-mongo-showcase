@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "6e46f40d-0557-4cef-adc8-c445f373b208",
+		"name": "Books API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a Book",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isbn\":\"978-1-60309-478-8\",\r\n    \"title\":\"Olga\",\r\n    \"authors\":[\r\n        {\r\n            \"firstName\":\"Bernhard\",\r\n            \"lastName\":\"Schlink\",\r\n            \"email\":\"b.schlink@outlook.com\"\r\n        }\r\n    ],\r\n    \"genre\":\"ROMANCE\",\r\n    \"publisher\":{\r\n        \"name\":\"Ili-ili\",\r\n        \"address\":{\r\n                \"street\":\"Vasil Glavinov\",\r\n                \"city\":\"Skopje\",\r\n                \"state\":\"Macedonia\",\r\n                \"zipCode\":\"1000\",\r\n                \"houseNumber\":\"3\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GraphQL paginated sequence of Books",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query GetAllBooks (\r\n    $size:Int!, \r\n    $offset:Int!) {\r\n    books(\r\n        size: $size,\r\n        offset:$offset) {\r\n            total\r\n            content{\r\n                isbn\r\n                title\r\n                genre\r\n                publisher {\r\n                    name\r\n                    address {\r\n                        city\r\n                        state\r\n                    }\r\n                }\r\n            }\r\n        }\r\n}",
+						"variables": "{\r\n    \"size\": 2, \r\n    \"offset\":0\r\n }"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : \"60b618bed22022777f298d39\",\r\n    \"isbn\" : \"978-1-891830-25-9\",\r\n    \"genre\" : \"DYSTOPIAN\",\r\n    \"title\" : \"A clockwork Orange.\",\r\n    \"authors\" : [ \r\n        {\r\n            \"firstName\" : \"Boo\",\r\n            \"lastName\" : \"Foo\",\r\n            \"email\" : \"boo_foo@mail.com\"\r\n        }, \r\n        {\r\n            \"firstName\" : \"Foo\",\r\n            \"lastName\" : \"Boo\",\r\n            \"email\" : \"foo_boo@mail.com\"\r\n        }\r\n    ],\r\n    \"publisher\" : {\r\n        \"name\" : \"PEARSON\",\r\n        \"address\" : {\r\n            \"city\" : \"London\",\r\n            \"state\" : \"United Kingdom\",\r\n            \"houseNumber\" : \"23A\",\r\n            \"zipCode\" : \"EC1A\",\r\n            \"street\" : \"88 Park Road\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
