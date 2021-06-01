@@ -10,6 +10,10 @@ This is simple show case where we have exposed simple REST API but at some point
 
 # Running Local
 ````
+mvn verify
+````
+
+````
 mvn spring-boot:run
 ````
 Navigate to http://localhost:8080/swagger-ui.html to check Swagger UI API definition and you are ready to go!! 
