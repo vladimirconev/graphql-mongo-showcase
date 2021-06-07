@@ -41,7 +41,7 @@ public class BookRestController {
 			@ApiResponse(code = 404, message = "Not found", response = ErrorResponseDto.class),
 			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class) })
 	@GetMapping(path = "/books/{bookId}")
-	public ResponseEntity<BookResponseDto> retieveBookByIsbn(
+	public ResponseEntity<BookResponseDto> retrieveBookById(
 			final @PathVariable("bookId") String bookId) {
 		var result = bookService.retrieveBookById(bookId);
 		return new ResponseEntity<>(BookRestMapper.mapBookToBookResponseDto(result),
