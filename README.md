@@ -16,6 +16,9 @@ mvn verify
 ````
 mvn spring-boot:run
 ````
-Navigate to http://localhost:8080/swagger-ui.html to check Swagger UI API definition and you are ready to go!! 
+- Navigate to http://localhost:8080/swagger-ui.html to check Swagger UI API definition. 
+- Setting up 'demo.initial.data.load' to true in application.properties will load some sample dummy data on startup. 
+- Import postman collection in case you want to check up GraphQL exposed end point.
+
 Happy coding!!! 
 
