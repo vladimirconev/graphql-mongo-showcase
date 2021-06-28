@@ -9,15 +9,16 @@ This is simple show case where we have exposed simple REST API but at some point
 - Robo 3T (Robomongo) as nice to have (https://robomongo.org/download) or MongoDB Compass (https://www.mongodb.com/products/compass)
 
 # Running Local
+To Build:
 ````
-mvn verify
+mvn clean verify
 ````
-
+To Run:
 ````
 mvn spring-boot:run
 ````
 - Navigate to http://localhost:8080/swagger-ui.html to check Swagger UI API definition. 
-- Setting up 'demo.initial.data.load' to true in application.properties will load some sample dummy data on startup. 
+- Setting up `demo.initial.data.load` to `true` in `application.properties` will load some sample dummy data on startup. 
 - Import postman collection in case you want to check up GraphQL exposed end point.
 
 Happy coding!!! 
