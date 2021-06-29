@@ -2,10 +2,7 @@ package com.example.graphqlshowcase.adapter.in;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,9 +63,8 @@ public class RestExceptionHandler {
 		Map<String, Object> errors = errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults());
 		final Throwable webRequestThrowable = errorAttributes.getError(webRequest);
 
-		String exception = webRequestThrowable.getCause() != null
-				? webRequestThrowable.getCause().getClass().getSimpleName()
-				: webRequestThrowable.getClass().getSimpleName();
+		String exception = Optional.ofNullable(webRequestThrowable.getCause()).map(cause -> cause.getClass().getSimpleName())
+				.orElse(webRequestThrowable.getClass().getSimpleName());
 
 		return ErrorResponseDto.builder()
 				.status(httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
@@ -76,8 +72,9 @@ public class RestExceptionHandler {
 						: httpStatus.getReasonPhrase())
 				.code(httpStatus == HttpStatus.INTERNAL_SERVER_ERROR ? String.valueOf(HttpStatus.SERVICE_UNAVAILABLE)
 						: String.valueOf(httpStatus.value()))
-				.message(messageDetails != null ? messageDetails : errors.get(MESSAGE_KEY).toString())
-				.path(errors.get(PATH_KEY) != null ? errors.get(PATH_KEY).toString() : request.getRequestURI())
+				.message(Optional.ofNullable(messageDetails).orElse(Optional.ofNullable(errors.get(MESSAGE_KEY))
+						.map(Object::toString).orElse(null)))
+				.path(Optional.ofNullable(errors.get(PATH_KEY)).map(Object::toString).orElse(request.getRequestURI()))
 				.httpMethod(request.getMethod()).exception(exception)
 				.timestamp(new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date())).build();
 	}

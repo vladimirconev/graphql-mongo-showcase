@@ -10,12 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class ErrorHandlingConfig {
-	
-	@Autowired
-	private DefaultErrorAttributes errorAttributes; 
-	
+
 	@Bean
-	public RestExceptionHandler exceptionHandler() {
+	public RestExceptionHandler exceptionHandler(@Autowired  DefaultErrorAttributes errorAttributes) {
 		return new RestExceptionHandler(errorAttributes, new ObjectMapper());
 	}
 
