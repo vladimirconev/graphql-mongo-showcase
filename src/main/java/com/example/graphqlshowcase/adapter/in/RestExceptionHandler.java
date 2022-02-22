@@ -50,7 +50,6 @@ public class RestExceptionHandler {
 		try {
 			return new ResponseEntity<>(objectMapper.writeValueAsString(errorResponseDto), httpHeaders, status);
 		} catch (JsonProcessingException jpe) {
-			log.error("Exception on creating JSON response due to: '{}'.", jpe.getMessage(), jpe);
 			return new ResponseEntity<>(exception.getMessage(), httpHeaders, status);
 		}
 	}
