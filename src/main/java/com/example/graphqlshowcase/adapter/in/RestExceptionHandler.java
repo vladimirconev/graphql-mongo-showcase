@@ -38,7 +38,6 @@ public class RestExceptionHandler {
 	private static final String PATH_KEY = "path";
 	private static final String MESSAGE_KEY = "message";
 
-	
 	private final DefaultErrorAttributes errorAttributes;
 	private final ObjectMapper objectMapper;
 
