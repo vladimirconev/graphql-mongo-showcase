@@ -1,10 +1,8 @@
 package com.example.graphqlshowcase.adapter.in.dto.response;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,22 +10,21 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponseDto implements Serializable {
-	
-	private static final long serialVersionUID = -1812607289914319079L;
 
-    private String code;
+  private static final long serialVersionUID = -1812607289914319079L;
 
-    private String status;
+  private String code;
 
-    private String httpMethod;
+  private String status;
 
-    private String exception;
+  private String httpMethod;
 
-    private String path;
+  private String exception;
 
-    private String message;
+  private String path;
 
-    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:SS.ssZ")
-    private String timestamp;
+  private String message;
 
+  @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:SS.ssZ")
+  private String timestamp;
 }
