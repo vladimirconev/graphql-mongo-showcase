@@ -6,15 +6,22 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import java.util.Collection;
 import java.util.Collections;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+  private @Value("${spring.data.mongodb.database}") String databaseName;
+  private @Value("${spring.data.mongodb.host}") String host;
+  private @Value("${spring.data.mongodb.port}") Integer port;
+  private @Value("${spring.data.mongodb.username}") String username;
+  private @Value("${spring.data.mongodb.password}") CharSequence password;
+
   @Override
   protected String getDatabaseName() {
-    return "books";
+    return databaseName;
   }
 
   @Override
@@ -24,11 +31,20 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
   @Override
   public MongoClient mongoClient() {
-    ConnectionString connectionString =
-        new ConnectionString("mongodb://root:example@localhost:27017/");
+    ConnectionString connectionString = new ConnectionString(connectionString());
     MongoClientSettings mongoClientSettings =
-        MongoClientSettings.builder().applyConnectionString(connectionString).build();
+        MongoClientSettings.builder()
+            .applyConnectionString(connectionString)
+            .retryReads(true)
+            .build();
 
     return MongoClients.create(mongoClientSettings);
+  }
+
+  private String connectionString() {
+    if (username != null && password != null && !username.isBlank() && !password.isEmpty()) {
+      return String.format("mongodb://%s:%s@%s:%d/", username, password, host, port);
+    }
+    return String.format("mongodb://%s:%d", host, port);
   }
 }
