@@ -15,7 +15,7 @@ import org.springframework.data.annotation.Id;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class BookMongoDto implements Serializable {
+public class BookMongo implements Serializable {
 
   private static final long serialVersionUID = 5879593082798937046L;
 
@@ -27,9 +27,9 @@ public class BookMongoDto implements Serializable {
 
   private String title;
 
-  private Set<AuthorMongoDto> authors;
+  private Set<AuthorMongo> authors;
 
-  private PublisherMongoDto publisher;
+  private PublisherMongo publisher;
 
   private LocalDateTime creationDate;
 

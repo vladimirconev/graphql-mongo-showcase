@@ -4,7 +4,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class AuthorResponseDto implements Serializable {
+public class AuthorResponse implements Serializable {
 
   private static final long serialVersionUID = 7677769326596733712L;
 

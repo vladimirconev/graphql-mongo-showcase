@@ -1,9 +1,9 @@
 package com.example.graphqlshowcase.adapter.in;
 
-import com.example.graphqlshowcase.adapter.in.dto.request.CreateBookRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.request.UpdateBookRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.BookResponseDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponseDto;
+import com.example.graphqlshowcase.adapter.in.dto.request.CreateBookRequest;
+import com.example.graphqlshowcase.adapter.in.dto.request.UpdateBookRequest;
+import com.example.graphqlshowcase.adapter.in.dto.response.BookResponse;
+import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponse;
 import com.example.graphqlshowcase.domain.BookDomainService;
 import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
@@ -39,19 +39,19 @@ public class BookRestController {
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "OK", response = BookResponseDto.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDto.class),
+        @ApiResponse(code = 200, message = "OK", response = BookResponse.class),
+        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not found", response = ErrorResponse.class),
         @ApiResponse(
             code = 503,
             message = "Service temporally unavailable",
-            response = ErrorResponseDto.class)
+            response = ErrorResponse.class)
       })
   @GetMapping(path = "/books/{bookId}")
-  public ResponseEntity<BookResponseDto> retrieveBookById(
+  public ResponseEntity<BookResponse> retrieveBookById(
       final @PathVariable("bookId") String bookId) {
     var result = bookService.retrieveBookById(bookId);
-    return new ResponseEntity<>(BookRestMapper.mapBookToBookResponseDto(result), HttpStatus.OK);
+    return new ResponseEntity<>(BookRestMapper.mapBookToBookResponse(result), HttpStatus.OK);
   }
 
   @ApiOperation(
@@ -59,29 +59,29 @@ public class BookRestController {
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 201, message = "Created", response = BookResponseDto.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
+        @ApiResponse(code = 201, message = "Created", response = BookResponse.class),
+        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
         @ApiResponse(
             code = 503,
             message = "Service temporally unavailable",
-            response = ErrorResponseDto.class)
+            response = ErrorResponse.class)
       })
   @PostMapping(
       path = "/books",
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BookResponseDto> createBook(
-      final @RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
-    var authors = BookRestMapper.mapAuthorRequestDtosToAuthors(createBookRequestDto.getAuthors());
+  public ResponseEntity<BookResponse> createBook(
+      final @RequestBody @Valid CreateBookRequest createBookRequest) {
+    var authors = BookRestMapper.mapAuthorRequestsToAuthors(createBookRequest.getAuthors());
     var createdBook =
         bookService.createBook(
-            new ISBN(createBookRequestDto.getIsbn()),
-            Genre.valueOf(createBookRequestDto.getGenre()),
-            createBookRequestDto.getTitle(),
+            new ISBN(createBookRequest.getIsbn()),
+            Genre.valueOf(createBookRequest.getGenre()),
+            createBookRequest.getTitle(),
             authors,
-            BookRestMapper.mapPublisherRequestDtoToPublisher(createBookRequestDto.getPublisher()));
-    var output = BookRestMapper.mapBookToBookResponseDto(createdBook);
-    return new ResponseEntity<BookResponseDto>(output, HttpStatus.CREATED);
+            BookRestMapper.mapPublisherRequestToPublisher(createBookRequest.getPublisher()));
+    var output = BookRestMapper.mapBookToBookResponse(createdBook);
+    return new ResponseEntity<>(output, HttpStatus.CREATED);
   }
 
   @ApiOperation(
@@ -89,27 +89,26 @@ public class BookRestController {
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "Updated", response = BookResponseDto.class),
+        @ApiResponse(code = 200, message = "Updated", response = BookResponse.class),
         @ApiResponse(code = 422, message = "Unprocessable Entity"),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDto.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDto.class),
+        @ApiResponse(code = 404, message = "Not found", response = ErrorResponse.class),
+        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
         @ApiResponse(
             code = 503,
             message = "Service temporally unavailable",
-            response = ErrorResponseDto.class)
+            response = ErrorResponse.class)
       })
   @PutMapping(
       path = "/books",
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BookResponseDto> updateBook(
-      final @RequestBody @Valid UpdateBookRequestDto updateBookRequestDto) {
-    var book = BookRestMapper.mapUpdateBookRequestDtoToBook(updateBookRequestDto);
+  public ResponseEntity<BookResponse> updateBook(
+      final @RequestBody @Valid UpdateBookRequest updateBookRequest) {
+    var book = BookRestMapper.mapUpdateBookRequestToBook(updateBookRequest);
     boolean wasAcknowledged = bookService.updateBook(book);
     if (wasAcknowledged) {
-      var updatedBook = bookService.retrieveBookById(updateBookRequestDto.getId());
-      return new ResponseEntity<>(
-          BookRestMapper.mapBookToBookResponseDto(updatedBook), HttpStatus.OK);
+      var updatedBook = bookService.retrieveBookById(updateBookRequest.getId());
+      return new ResponseEntity<>(BookRestMapper.mapBookToBookResponse(updatedBook), HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
   }

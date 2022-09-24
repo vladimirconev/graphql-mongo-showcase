@@ -5,16 +5,15 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
-public class CreateBookRequestDto implements Serializable {
+@Data
+public class UpdateBookRequest implements Serializable {
 
-  private static final long serialVersionUID = -7836279725299277885L;
+  private static final long serialVersionUID = 4656640694464246801L;
+
+  @NotNull(message = "Id can not be null.")
+  private String id;
 
   @NotNull(message = "ISBN can not be null.")
   private String isbn;
@@ -24,7 +23,7 @@ public class CreateBookRequestDto implements Serializable {
 
   @NotNull(message = "Authors can not be null.")
   @Valid
-  private List<AuthorRequestDto> authors;
+  private List<AuthorRequest> authors;
 
   @NotNull(message = "Genre can not be null.")
   @Pattern(
@@ -52,5 +51,5 @@ public class CreateBookRequestDto implements Serializable {
   private String genre;
 
   @NotNull(message = "Publisher can not be null.")
-  private PublisherRequestDto publisher;
+  private PublisherRequest publisher;
 }

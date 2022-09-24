@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ErrorResponseDto implements Serializable {
+public class ErrorResponse implements Serializable {
 
   private static final long serialVersionUID = -1812607289914319079L;
 

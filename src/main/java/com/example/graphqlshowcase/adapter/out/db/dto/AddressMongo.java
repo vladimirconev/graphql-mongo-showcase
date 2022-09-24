@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class AddressMongoDto implements Serializable {
+public class AddressMongo implements Serializable {
 
   private static final long serialVersionUID = -2938052011869723591L;
 

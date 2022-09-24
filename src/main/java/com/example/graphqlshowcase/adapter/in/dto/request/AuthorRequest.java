@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class AuthorRequestDto implements Serializable {
+public class AuthorRequest implements Serializable {
 
   private static final long serialVersionUID = 4232016275632359748L;
 

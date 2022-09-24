@@ -1,6 +1,6 @@
 package com.example.graphqlshowcase.adapter.in;
 
-import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponseDto;
+import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
@@ -43,16 +43,16 @@ public class RestExceptionHandler {
       final String message) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-    ErrorResponseDto errorResponseDto = buildErrorResponseDto(status, request, message);
+    ErrorResponse errorResponse = buildErrorResponseDto(status, request, message);
     try {
       return new ResponseEntity<>(
-          objectMapper.writeValueAsString(errorResponseDto), httpHeaders, status);
+          objectMapper.writeValueAsString(errorResponse), httpHeaders, status);
     } catch (JsonProcessingException jpe) {
       return new ResponseEntity<>(exception.getMessage(), httpHeaders, status);
     }
   }
 
-  protected ErrorResponseDto buildErrorResponseDto(
+  protected ErrorResponse buildErrorResponseDto(
       final HttpStatus httpStatus, final WebRequest webRequest, final String messageDetails) {
 
     ServletWebRequest servletRequest = (ServletWebRequest) webRequest;
@@ -66,7 +66,7 @@ public class RestExceptionHandler {
             .map(cause -> cause.getClass().getSimpleName())
             .orElse(webRequestThrowable.getClass().getSimpleName());
 
-    return ErrorResponseDto.builder()
+    return ErrorResponse.builder()
         .status(
             httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
                 ? HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()

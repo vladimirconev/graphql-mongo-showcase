@@ -10,13 +10,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class AuthorMongoDto implements Serializable {
+public class PublisherMongo implements Serializable {
 
-  private static final long serialVersionUID = -5174940638387804658L;
+  private static final long serialVersionUID = -1360153551725166756L;
 
-  private String firstName;
+  private String name;
 
-  private String lastName;
-
-  private String email;
+  private AddressMongo address;
 }

@@ -1,9 +1,9 @@
 package com.example.graphqlshowcase.adapter.out;
 
-import com.example.graphqlshowcase.adapter.out.db.dto.AddressMongoDto;
-import com.example.graphqlshowcase.adapter.out.db.dto.AuthorMongoDto;
-import com.example.graphqlshowcase.adapter.out.db.dto.BookMongoDto;
-import com.example.graphqlshowcase.adapter.out.db.dto.PublisherMongoDto;
+import com.example.graphqlshowcase.adapter.out.db.dto.AddressMongo;
+import com.example.graphqlshowcase.adapter.out.db.dto.AuthorMongo;
+import com.example.graphqlshowcase.adapter.out.db.dto.BookMongo;
+import com.example.graphqlshowcase.adapter.out.db.dto.PublisherMongo;
 import com.example.graphqlshowcase.domain.entity.Book;
 import com.example.graphqlshowcase.domain.valueobject.Address;
 import com.example.graphqlshowcase.domain.valueobject.Author;
@@ -18,59 +18,55 @@ public class BookDbMapper {
 
   private BookDbMapper() {}
 
-  public static Set<AuthorMongoDto> mapAuthorsToAuthorMongoDtos(final List<Author> authors) {
-    return authors.stream()
-        .map(BookDbMapper::mapAuthorToAuthorMongoDto)
-        .collect(Collectors.toSet());
+  public static Set<AuthorMongo> mapAuthorsToAuthorMongoDtos(final List<Author> authors) {
+    return authors.stream().map(BookDbMapper::mapAuthorToAuthorMongo).collect(Collectors.toSet());
   }
 
-  private static AuthorMongoDto mapAuthorToAuthorMongoDto(final Author author) {
-    var authorMongoDto = new AuthorMongoDto();
+  private static AuthorMongo mapAuthorToAuthorMongo(final Author author) {
+    var authorMongoDto = new AuthorMongo();
     authorMongoDto.setEmail(author.getEmail());
     authorMongoDto.setFirstName(author.getFirstName());
     authorMongoDto.setLastName(author.getLastName());
     return authorMongoDto;
   }
 
-  private static List<Author> mapAuthorMongoDtosToAuthors(
-      final Set<AuthorMongoDto> authorMongoDtos) {
-    return authorMongoDtos.stream()
-        .map(BookDbMapper::mapAuthorMongoDtoToAuthor)
+  private static List<Author> mapAuthorMongoDtosToAuthors(final Set<AuthorMongo> authorMongos) {
+    return authorMongos.stream()
+        .map(BookDbMapper::mapAuthorMongoToAuthor)
         .collect(Collectors.toList());
   }
 
-  private static Author mapAuthorMongoDtoToAuthor(final AuthorMongoDto authorMongoDto) {
+  private static Author mapAuthorMongoToAuthor(final AuthorMongo authorMongo) {
     return new Author(
-        authorMongoDto.getFirstName(), authorMongoDto.getLastName(), authorMongoDto.getEmail());
+        authorMongo.getFirstName(), authorMongo.getLastName(), authorMongo.getEmail());
   }
 
-  public static Book mapBookMongoDtoToBook(final BookMongoDto bookMongoDto) {
+  public static Book mapBookMongoToBook(final BookMongo bookMongo) {
     return new Book(
-        bookMongoDto.getId(),
-        bookMongoDto.getTitle(),
-        new ISBN(bookMongoDto.getIsbn()),
-        mapAuthorMongoDtosToAuthors(bookMongoDto.getAuthors()),
-        Genre.valueOf(bookMongoDto.getGenre()),
-        mapPublisherMongoDtoToPublisher(bookMongoDto.getPublisher()));
+        bookMongo.getId(),
+        bookMongo.getTitle(),
+        new ISBN(bookMongo.getIsbn()),
+        mapAuthorMongoDtosToAuthors(bookMongo.getAuthors()),
+        Genre.valueOf(bookMongo.getGenre()),
+        mapPublisherMongoDtoToPublisher(bookMongo.getPublisher()));
   }
 
-  private static Publisher mapPublisherMongoDtoToPublisher(
-      final PublisherMongoDto publisherMongoDto) {
+  private static Publisher mapPublisherMongoDtoToPublisher(final PublisherMongo publisherMongo) {
     return new Publisher(
-        publisherMongoDto.getName(), mapAddressMongoDtoToAddress(publisherMongoDto.getAddress()));
+        publisherMongo.getName(), mapAddressMongoToAddress(publisherMongo.getAddress()));
   }
 
-  private static Address mapAddressMongoDtoToAddress(final AddressMongoDto addressMongoDto) {
+  private static Address mapAddressMongoToAddress(final AddressMongo addressMongo) {
     return new Address(
-        addressMongoDto.getHouseNumber(),
-        addressMongoDto.getState(),
-        addressMongoDto.getCity(),
-        addressMongoDto.getZipCode(),
-        addressMongoDto.getStreet());
+        addressMongo.getHouseNumber(),
+        addressMongo.getState(),
+        addressMongo.getCity(),
+        addressMongo.getZipCode(),
+        addressMongo.getStreet());
   }
 
-  public static BookMongoDto mapBookToBookMongoDto(final Book book) {
-    return BookMongoDto.builder()
+  public static BookMongo mapBookToBookMongO(final Book book) {
+    return BookMongo.builder()
         .genre(book.getGenre().name())
         .authors(null)
         .title(book.getTitle())
@@ -78,20 +74,20 @@ public class BookDbMapper {
         .build();
   }
 
-  public static PublisherMongoDto mapPublisherToPublisherMongoDto(final Publisher publisher) {
-    var publisherMongoDto = new PublisherMongoDto();
-    publisherMongoDto.setName(publisher.getName());
-    publisherMongoDto.setAddress(mapAddressToAddressMongoDto(publisher.getAddress()));
-    return publisherMongoDto;
+  public static PublisherMongo mapPublisherToPublisherMongo(final Publisher publisher) {
+    var publisherMongo = new PublisherMongo();
+    publisherMongo.setName(publisher.getName());
+    publisherMongo.setAddress(mapAddressToAddressMongo(publisher.getAddress()));
+    return publisherMongo;
   }
 
-  private static AddressMongoDto mapAddressToAddressMongoDto(final Address address) {
-    var addressMongoDto = new AddressMongoDto();
-    addressMongoDto.setCity(address.getCity());
-    addressMongoDto.setHouseNumber(address.getHouseNumber());
-    addressMongoDto.setState(address.getState());
-    addressMongoDto.setStreet(address.getStreet());
-    addressMongoDto.setZipCode(address.getZipCode());
-    return addressMongoDto;
+  private static AddressMongo mapAddressToAddressMongo(final Address address) {
+    var addressMongo = new AddressMongo();
+    addressMongo.setCity(address.getCity());
+    addressMongo.setHouseNumber(address.getHouseNumber());
+    addressMongo.setState(address.getState());
+    addressMongo.setStreet(address.getStreet());
+    addressMongo.setZipCode(address.getZipCode());
+    return addressMongo;
   }
 }

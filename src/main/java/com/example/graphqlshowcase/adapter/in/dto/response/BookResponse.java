@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class BookResponseDto implements Serializable {
+public class BookResponse implements Serializable {
 
   private static final long serialVersionUID = -2459078227556872842L;
 
@@ -15,9 +15,9 @@ public class BookResponseDto implements Serializable {
 
   private String title;
 
-  private List<AuthorResponseDto> authors;
+  private List<AuthorResponse> authors;
 
   private String genre;
 
-  private PublisherResponseDto publisher;
+  private PublisherResponse publisher;
 }

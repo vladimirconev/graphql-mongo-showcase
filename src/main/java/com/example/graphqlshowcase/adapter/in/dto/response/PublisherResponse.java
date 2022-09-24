@@ -4,11 +4,11 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class PublisherResponseDto implements Serializable {
+public class PublisherResponse implements Serializable {
 
   private static final long serialVersionUID = 9059761264216237720L;
 
   private String name;
 
-  private AddressResponseDto address;
+  private AddressResponse address;
 }

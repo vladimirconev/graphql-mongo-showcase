@@ -1,13 +1,13 @@
 package com.example.graphqlshowcase.adapter.in;
 
-import com.example.graphqlshowcase.adapter.in.dto.request.AddressRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.request.AuthorRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.request.PublisherRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.request.UpdateBookRequestDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.AddressResponseDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.AuthorResponseDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.BookResponseDto;
-import com.example.graphqlshowcase.adapter.in.dto.response.PublisherResponseDto;
+import com.example.graphqlshowcase.adapter.in.dto.request.AddressRequest;
+import com.example.graphqlshowcase.adapter.in.dto.request.AuthorRequest;
+import com.example.graphqlshowcase.adapter.in.dto.request.PublisherRequest;
+import com.example.graphqlshowcase.adapter.in.dto.request.UpdateBookRequest;
+import com.example.graphqlshowcase.adapter.in.dto.response.AddressResponse;
+import com.example.graphqlshowcase.adapter.in.dto.response.AuthorResponse;
+import com.example.graphqlshowcase.adapter.in.dto.response.BookResponse;
+import com.example.graphqlshowcase.adapter.in.dto.response.PublisherResponse;
 import com.example.graphqlshowcase.domain.entity.Book;
 import com.example.graphqlshowcase.domain.valueobject.Address;
 import com.example.graphqlshowcase.domain.valueobject.Author;
@@ -21,90 +21,83 @@ public class BookRestMapper {
 
   private BookRestMapper() {}
 
-  public static BookResponseDto mapBookToBookResponseDto(final Book book) {
-    var bookResponseDto = new BookResponseDto();
-    bookResponseDto.setId(book.getId());
-    bookResponseDto.setGenre(book.getGenre().name());
-    bookResponseDto.setIsbn(book.getIsbn().getIsbn());
-    bookResponseDto.setTitle(book.getTitle());
-    bookResponseDto.setAuthors(mapAuthorsToAuthorResponseDtos(book.getAuthors()));
-    bookResponseDto.setPublisher(mapPublisherToPublisherResponseDto(book.getPublisher()));
-    return bookResponseDto;
+  public static BookResponse mapBookToBookResponse(final Book book) {
+    var bookResponse = new BookResponse();
+    bookResponse.setId(book.getId());
+    bookResponse.setGenre(book.getGenre().name());
+    bookResponse.setIsbn(book.getIsbn().getIsbn());
+    bookResponse.setTitle(book.getTitle());
+    bookResponse.setAuthors(mapAuthorsToAuthorResponses(book.getAuthors()));
+    bookResponse.setPublisher(mapPublisherToPublisherResponse(book.getPublisher()));
+    return bookResponse;
   }
 
-  private static PublisherResponseDto mapPublisherToPublisherResponseDto(
-      final Publisher publisher) {
-    var publisherResponseDto = new PublisherResponseDto();
-    publisherResponseDto.setName(publisher.getName());
-    publisherResponseDto.setAddress(mapAddressToAddressResponseDto(publisher.getAddress()));
-    return publisherResponseDto;
+  private static PublisherResponse mapPublisherToPublisherResponse(final Publisher publisher) {
+    var publisherResponse = new PublisherResponse();
+    publisherResponse.setName(publisher.getName());
+    publisherResponse.setAddress(mapAddressToAddressResponse(publisher.getAddress()));
+    return publisherResponse;
   }
 
-  private static AddressResponseDto mapAddressToAddressResponseDto(final Address address) {
-    var addressResponseDto = new AddressResponseDto();
-    addressResponseDto.setCity(address.getCity());
-    addressResponseDto.setHouseNumber(address.getHouseNumber());
-    addressResponseDto.setState(address.getState());
-    addressResponseDto.setStreet(address.getStreet());
-    addressResponseDto.setZipCode(address.getZipCode());
-    return addressResponseDto;
+  private static AddressResponse mapAddressToAddressResponse(final Address address) {
+    var addressResponse = new AddressResponse();
+    addressResponse.setCity(address.getCity());
+    addressResponse.setHouseNumber(address.getHouseNumber());
+    addressResponse.setState(address.getState());
+    addressResponse.setStreet(address.getStreet());
+    addressResponse.setZipCode(address.getZipCode());
+    return addressResponse;
   }
 
-  public static Book mapUpdateBookRequestDtoToBook(final UpdateBookRequestDto bookRequestDto) {
-    var isbn = new ISBN(bookRequestDto.getIsbn());
-    var genre = Genre.valueOf(bookRequestDto.getGenre());
-    List<Author> authors = mapAuthorRequestDtosToAuthors(bookRequestDto.getAuthors());
+  public static Book mapUpdateBookRequestToBook(final UpdateBookRequest bookRequest) {
+    var isbn = new ISBN(bookRequest.getIsbn());
+    var genre = Genre.valueOf(bookRequest.getGenre());
+    List<Author> authors = mapAuthorRequestsToAuthors(bookRequest.getAuthors());
     return new Book(
-        bookRequestDto.getId(),
-        bookRequestDto.getTitle(),
+        bookRequest.getId(),
+        bookRequest.getTitle(),
         isbn,
         authors,
         genre,
-        mapPublisherRequestDtoToPublisher(bookRequestDto.getPublisher()));
+        mapPublisherRequestToPublisher(bookRequest.getPublisher()));
   }
 
-  public static Publisher mapPublisherRequestDtoToPublisher(
-      final PublisherRequestDto publisherRequestDto) {
+  public static Publisher mapPublisherRequestToPublisher(final PublisherRequest publisherRequest) {
     return new Publisher(
-        publisherRequestDto.getName(),
-        mapAddressRequestDtoToAddress(publisherRequestDto.getAddress()));
+        publisherRequest.getName(), mapAddressRequestToAddress(publisherRequest.getAddress()));
   }
 
-  private static Address mapAddressRequestDtoToAddress(final AddressRequestDto addressRequestDto) {
+  private static Address mapAddressRequestToAddress(final AddressRequest addressRequest) {
     return new Address(
-        addressRequestDto.getHouseNumber(),
-        addressRequestDto.getState(),
-        addressRequestDto.getCity(),
-        addressRequestDto.getZipCode(),
-        addressRequestDto.getStreet());
+        addressRequest.getHouseNumber(),
+        addressRequest.getState(),
+        addressRequest.getCity(),
+        addressRequest.getZipCode(),
+        addressRequest.getStreet());
   }
 
-  public static List<Author> mapAuthorRequestDtosToAuthors(
-      final List<AuthorRequestDto> authorRequestDtos) {
-    return authorRequestDtos.stream()
-        .map(BookRestMapper::mapAuthorRequestDtoToAuthor)
+  public static List<Author> mapAuthorRequestsToAuthors(final List<AuthorRequest> authorRequests) {
+    return authorRequests.stream()
+        .map(BookRestMapper::mapAuthorRequestToAuthor)
         .collect(Collectors.toList());
   }
 
-  private static Author mapAuthorRequestDtoToAuthor(final AuthorRequestDto authorRequestDto) {
+  private static Author mapAuthorRequestToAuthor(final AuthorRequest authorRequest) {
     return new Author(
-        authorRequestDto.getFirstName(),
-        authorRequestDto.getLastName(),
-        authorRequestDto.getEmail());
+        authorRequest.getFirstName(), authorRequest.getLastName(), authorRequest.getEmail());
   }
 
-  private static List<AuthorResponseDto> mapAuthorsToAuthorResponseDtos(
-      final List<Author> authors) {
+  private static List<AuthorResponse> mapAuthorsToAuthorResponses(final List<Author> authors) {
     return authors.stream()
-        .map(BookRestMapper::mapAuthorToAuthorResponseDto)
+        .map(BookRestMapper::mapAuthorToAuthorResponse)
         .collect(Collectors.toList());
   }
 
-  private static AuthorResponseDto mapAuthorToAuthorResponseDto(final Author author) {
-    var authorResponseDto = new AuthorResponseDto();
-    authorResponseDto.setEmail(author.getEmail());
-    authorResponseDto.setFirstName(author.getFirstName());
-    authorResponseDto.setLastName(author.getLastName());
-    return authorResponseDto;
+  private static AuthorResponse mapAuthorToAuthorResponse(final Author author) {
+    var authorResponse = new AuthorResponse();
+    authorResponse.setEmail(author.getEmail());
+    authorResponse.setFirstName(author.getFirstName());
+    authorResponse.setLastName(author.getLastName());
+    return authorResponse;
   }
 }

@@ -1,6 +1,6 @@
 package com.example.graphqlshowcase.adapter.out;
 
-import com.example.graphqlshowcase.adapter.out.db.dto.BookMongoDto;
+import com.example.graphqlshowcase.adapter.out.db.dto.BookMongo;
 import com.example.graphqlshowcase.domain.BookRepository;
 import com.example.graphqlshowcase.domain.entity.Book;
 import com.example.graphqlshowcase.domain.valueobject.Author;
@@ -34,16 +34,16 @@ public class MongoBookRepository implements BookRepository {
       final List<Author> authors,
       final Publisher publisher) {
     var bookMongoDto =
-        BookMongoDto.builder()
+        BookMongo.builder()
             .genre(genre.name())
             .title(title)
             .isbn(isbn.getIsbn())
             .authors(BookDbMapper.mapAuthorsToAuthorMongoDtos(authors))
-            .publisher(BookDbMapper.mapPublisherToPublisherMongoDto(publisher))
+            .publisher(BookDbMapper.mapPublisherToPublisherMongo(publisher))
             .creationDate(LocalDateTime.now())
             .build();
-    BookMongoDto savedBookMongoDto = mongoOperations.save(bookMongoDto, BOOKS_COLLECTION_NAME);
-    return BookDbMapper.mapBookMongoDtoToBook(savedBookMongoDto);
+    BookMongo savedBookMongo = mongoOperations.save(bookMongoDto, BOOKS_COLLECTION_NAME);
+    return BookDbMapper.mapBookMongoToBook(savedBookMongo);
   }
 
   @Override
@@ -52,14 +52,14 @@ public class MongoBookRepository implements BookRepository {
     update.set("title", book.getTitle());
     update.set("authors", BookDbMapper.mapAuthorsToAuthorMongoDtos(book.getAuthors()));
     update.set("isbn", book.getIsbn().getIsbn());
-    update.set("publisher", BookDbMapper.mapPublisherToPublisherMongoDto(book.getPublisher()));
+    update.set("publisher", BookDbMapper.mapPublisherToPublisherMongo(book.getPublisher()));
     update.set("genre", book.getGenre().name());
     update.set("lastUpdateDate", LocalDateTime.now());
     UpdateResult updateResult =
         mongoOperations.updateFirst(
             new Query().addCriteria(Criteria.where("id").is(book.getId())),
             update,
-            BookMongoDto.class,
+            BookMongo.class,
             BOOKS_COLLECTION_NAME);
     return updateResult.wasAcknowledged();
   }
@@ -68,11 +68,11 @@ public class MongoBookRepository implements BookRepository {
   public Book retrieveBookById(final String id) {
     Query query = new Query();
     query.addCriteria(Criteria.where("id").is(id));
-    var bookMongoDto = mongoOperations.findOne(query, BookMongoDto.class, BOOKS_COLLECTION_NAME);
+    var bookMongoDto = mongoOperations.findOne(query, BookMongo.class, BOOKS_COLLECTION_NAME);
     if (bookMongoDto == null) {
       throw new NoSuchElementException(String.format("Book with ID: %s is Not found.", id));
     }
-    return BookDbMapper.mapBookMongoDtoToBook(bookMongoDto);
+    return BookDbMapper.mapBookMongoToBook(bookMongoDto);
   }
 
   @Override
