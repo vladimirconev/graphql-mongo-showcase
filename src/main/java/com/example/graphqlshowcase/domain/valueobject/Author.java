@@ -1,16 +1,10 @@
 package com.example.graphqlshowcase.domain.valueobject;
 
+import java.io.Serial;
 import java.io.Serializable;
-import lombok.Value;
 
-@Value
-public class Author implements Serializable {
+public record Author(String firstName, String lastName, String email) implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 3225853817761988505L;
-
-  private final String firstName;
-
-  private final String lastName;
-
-  private final String email;
 }

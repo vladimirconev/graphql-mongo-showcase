@@ -4,10 +4,10 @@ public enum Genre {
   SCI_FI,
   FANTASY,
   MYSTERY,
-  TRILLER,
+  THRILLER,
   ROMANCE,
   WESTERNS,
   DYSTOPIAN,
   CONTEMPORARY,
-  OTHER;
+  OTHER
 }

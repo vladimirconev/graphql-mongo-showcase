@@ -24,9 +24,9 @@ public class BookDbMapper {
 
   private static AuthorMongo mapAuthorToAuthorMongo(final Author author) {
     var authorMongoDto = new AuthorMongo();
-    authorMongoDto.setEmail(author.getEmail());
-    authorMongoDto.setFirstName(author.getFirstName());
-    authorMongoDto.setLastName(author.getLastName());
+    authorMongoDto.setEmail(author.email());
+    authorMongoDto.setFirstName(author.firstName());
+    authorMongoDto.setLastName(author.lastName());
     return authorMongoDto;
   }
 
@@ -67,27 +67,27 @@ public class BookDbMapper {
 
   public static BookMongo mapBookToBookMongO(final Book book) {
     return BookMongo.builder()
-        .genre(book.getGenre().name())
+        .genre(book.genre().name())
         .authors(null)
-        .title(book.getTitle())
-        .isbn(book.getIsbn().getIsbn())
+        .title(book.title())
+        .isbn(book.isbn().isbn())
         .build();
   }
 
   public static PublisherMongo mapPublisherToPublisherMongo(final Publisher publisher) {
     var publisherMongo = new PublisherMongo();
-    publisherMongo.setName(publisher.getName());
-    publisherMongo.setAddress(mapAddressToAddressMongo(publisher.getAddress()));
+    publisherMongo.setName(publisher.name());
+    publisherMongo.setAddress(mapAddressToAddressMongo(publisher.address()));
     return publisherMongo;
   }
 
   private static AddressMongo mapAddressToAddressMongo(final Address address) {
     var addressMongo = new AddressMongo();
-    addressMongo.setCity(address.getCity());
-    addressMongo.setHouseNumber(address.getHouseNumber());
-    addressMongo.setState(address.getState());
-    addressMongo.setStreet(address.getStreet());
-    addressMongo.setZipCode(address.getZipCode());
+    addressMongo.setCity(address.city());
+    addressMongo.setHouseNumber(address.houseNumber());
+    addressMongo.setState(address.state());
+    addressMongo.setStreet(address.street());
+    addressMongo.setZipCode(address.zipCode());
     return addressMongo;
   }
 }

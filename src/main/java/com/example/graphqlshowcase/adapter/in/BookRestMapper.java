@@ -23,29 +23,29 @@ public class BookRestMapper {
 
   public static BookResponse mapBookToBookResponse(final Book book) {
     var bookResponse = new BookResponse();
-    bookResponse.setId(book.getId());
-    bookResponse.setGenre(book.getGenre().name());
-    bookResponse.setIsbn(book.getIsbn().getIsbn());
-    bookResponse.setTitle(book.getTitle());
-    bookResponse.setAuthors(mapAuthorsToAuthorResponses(book.getAuthors()));
-    bookResponse.setPublisher(mapPublisherToPublisherResponse(book.getPublisher()));
+    bookResponse.setId(book.id());
+    bookResponse.setGenre(book.genre().name());
+    bookResponse.setIsbn(book.isbn().isbn());
+    bookResponse.setTitle(book.title());
+    bookResponse.setAuthors(mapAuthorsToAuthorResponses(book.authors()));
+    bookResponse.setPublisher(mapPublisherToPublisherResponse(book.publisher()));
     return bookResponse;
   }
 
   private static PublisherResponse mapPublisherToPublisherResponse(final Publisher publisher) {
     var publisherResponse = new PublisherResponse();
-    publisherResponse.setName(publisher.getName());
-    publisherResponse.setAddress(mapAddressToAddressResponse(publisher.getAddress()));
+    publisherResponse.setName(publisher.name());
+    publisherResponse.setAddress(mapAddressToAddressResponse(publisher.address()));
     return publisherResponse;
   }
 
   private static AddressResponse mapAddressToAddressResponse(final Address address) {
     var addressResponse = new AddressResponse();
-    addressResponse.setCity(address.getCity());
-    addressResponse.setHouseNumber(address.getHouseNumber());
-    addressResponse.setState(address.getState());
-    addressResponse.setStreet(address.getStreet());
-    addressResponse.setZipCode(address.getZipCode());
+    addressResponse.setCity(address.city());
+    addressResponse.setHouseNumber(address.houseNumber());
+    addressResponse.setState(address.state());
+    addressResponse.setStreet(address.street());
+    addressResponse.setZipCode(address.zipCode());
     return addressResponse;
   }
 
@@ -95,9 +95,9 @@ public class BookRestMapper {
 
   private static AuthorResponse mapAuthorToAuthorResponse(final Author author) {
     var authorResponse = new AuthorResponse();
-    authorResponse.setEmail(author.getEmail());
-    authorResponse.setFirstName(author.getFirstName());
-    authorResponse.setLastName(author.getLastName());
+    authorResponse.setEmail(author.email());
+    authorResponse.setFirstName(author.firstName());
+    authorResponse.setLastName(author.lastName());
     return authorResponse;
   }
 }

@@ -93,7 +93,7 @@ public class BookApplicationStartupListener implements ApplicationListener<Conte
 
       bookRepository.createBook(
           isbnList.get(random.nextInt(isbnList.size())),
-          Genre.TRILLER,
+          Genre.THRILLER,
           "Ninja Chicken",
           List.of(foo, boo, mitchTimotchy),
           penguin);

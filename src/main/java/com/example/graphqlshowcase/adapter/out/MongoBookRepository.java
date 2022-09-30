@@ -8,23 +8,27 @@ import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
 import com.example.graphqlshowcase.domain.valueobject.Publisher;
 import com.mongodb.client.result.UpdateResult;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@RequiredArgsConstructor
 @EnableMongoRepositories
 public class MongoBookRepository implements BookRepository {
 
   private static final String BOOKS_COLLECTION_NAME = "books";
 
   private final MongoOperations mongoOperations;
+
+  public MongoBookRepository(final MongoOperations mongoOperations) {
+    this.mongoOperations = mongoOperations;
+  }
 
   @Override
   public Book createBook(
@@ -33,31 +37,32 @@ public class MongoBookRepository implements BookRepository {
       final String title,
       final List<Author> authors,
       final Publisher publisher) {
-    var bookMongoDto =
-        BookMongo.builder()
-            .genre(genre.name())
-            .title(title)
-            .isbn(isbn.getIsbn())
-            .authors(BookDbMapper.mapAuthorsToAuthorMongoDtos(authors))
-            .publisher(BookDbMapper.mapPublisherToPublisherMongo(publisher))
-            .creationDate(LocalDateTime.now())
-            .build();
-    BookMongo savedBookMongo = mongoOperations.save(bookMongoDto, BOOKS_COLLECTION_NAME);
-    return BookDbMapper.mapBookMongoToBook(savedBookMongo);
+    var savedBook =
+        mongoOperations.save(
+            BookMongo.builder()
+                .genre(genre.name())
+                .title(title)
+                .isbn(isbn.isbn())
+                .authors(BookDbMapper.mapAuthorsToAuthorMongoDtos(authors))
+                .publisher(BookDbMapper.mapPublisherToPublisherMongo(publisher))
+                .creationDate(LocalDateTime.now(Clock.systemUTC()))
+                .build(),
+            BOOKS_COLLECTION_NAME);
+    return BookDbMapper.mapBookMongoToBook(savedBook);
   }
 
   @Override
   public boolean updateBook(final Book book) {
     Update update = new Update();
-    update.set("title", book.getTitle());
-    update.set("authors", BookDbMapper.mapAuthorsToAuthorMongoDtos(book.getAuthors()));
-    update.set("isbn", book.getIsbn().getIsbn());
-    update.set("publisher", BookDbMapper.mapPublisherToPublisherMongo(book.getPublisher()));
-    update.set("genre", book.getGenre().name());
+    update.set("title", book.title());
+    update.set("authors", BookDbMapper.mapAuthorsToAuthorMongoDtos(book.authors()));
+    update.set("isbn", book.isbn());
+    update.set("publisher", BookDbMapper.mapPublisherToPublisherMongo(book.publisher()));
+    update.set("genre", book.genre().name());
     update.set("lastUpdateDate", LocalDateTime.now());
     UpdateResult updateResult =
         mongoOperations.updateFirst(
-            new Query().addCriteria(Criteria.where("id").is(book.getId())),
+            new Query().addCriteria(Criteria.where("id").is(book.id())),
             update,
             BookMongo.class,
             BOOKS_COLLECTION_NAME);
@@ -66,13 +71,14 @@ public class MongoBookRepository implements BookRepository {
 
   @Override
   public Book retrieveBookById(final String id) {
-    Query query = new Query();
-    query.addCriteria(Criteria.where("id").is(id));
-    var bookMongoDto = mongoOperations.findOne(query, BookMongo.class, BOOKS_COLLECTION_NAME);
-    if (bookMongoDto == null) {
-      throw new NoSuchElementException(String.format("Book with ID: %s is Not found.", id));
-    }
-    return BookDbMapper.mapBookMongoToBook(bookMongoDto);
+    return Optional.ofNullable(
+            mongoOperations.findOne(
+                new Query().addCriteria(Criteria.where("id").is(id)),
+                BookMongo.class,
+                BOOKS_COLLECTION_NAME))
+        .map(BookDbMapper::mapBookMongoToBook)
+        .orElseThrow(
+            () -> new NoSuchElementException("Book with ID: %s is Not found.".formatted(id)));
   }
 
   @Override

@@ -1,20 +1,11 @@
 package com.example.graphqlshowcase.domain.valueobject;
 
+import java.io.Serial;
 import java.io.Serializable;
-import lombok.Value;
 
-@Value
-public class Address implements Serializable {
+public record Address(String houseNumber, String state, String city, String zipCode, String street)
+    implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = -3830539598164444969L;
-
-  private final String houseNumber;
-
-  private final String state;
-
-  private final String city;
-
-  private final String zipCode;
-
-  private final String street;
 }
