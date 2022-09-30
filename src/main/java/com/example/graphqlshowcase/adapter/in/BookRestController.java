@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequiredArgsConstructor
 @Api(
     tags = {"Books"},
     value = "/books")
 public class BookRestController {
 
   private final BookDomainService bookService;
+
+  public BookRestController(BookDomainService bookService) {
+    this.bookService = bookService;
+  }
 
   @ApiOperation(
       value = "Retrieve a book by ID",

@@ -5,6 +5,5 @@ import java.io.Serializable;
 
 public record Publisher(String name, Address address) implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -4981490988152504647L;
+  @Serial private static final long serialVersionUID = -4981490988152504647L;
 }

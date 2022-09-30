@@ -7,14 +7,12 @@ import graphql.GraphQLError;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
 @RestController
 public class GraphQLBookRestController {
 
@@ -22,6 +20,10 @@ public class GraphQLBookRestController {
   private static final String VARIABLES = "variables";
 
   private final GraphQL graphQl;
+
+  public GraphQLBookRestController(GraphQL graphQl) {
+    this.graphQl = graphQl;
+  }
 
   @PostMapping(value = "/graphql/books")
   public ResponseEntity<?> retrieveAssessmentSummaries(@RequestBody Map<String, Object> body) {
@@ -38,8 +40,7 @@ public class GraphQLBookRestController {
   private void checkErrors(final List<GraphQLError> errors) {
     if (!CollectionUtils.isEmpty(errors)) {
       throw new IllegalStateException(
-          String.join(
-              "\r\n", errors.stream().map(GraphQLError::getMessage).collect(Collectors.toList())));
+              errors.stream().map(GraphQLError::getMessage).collect(Collectors.joining("\r\n")));
     }
   }
 }
