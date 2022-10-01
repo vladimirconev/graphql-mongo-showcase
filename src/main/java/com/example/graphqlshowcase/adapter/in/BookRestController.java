@@ -101,15 +101,16 @@ public class BookRestController {
             response = ErrorResponse.class)
       })
   @PutMapping(
-      path = "/books",
+      path = "/books/{bookId}",
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<BookResponse> updateBook(
-      final @RequestBody @Valid UpdateBookRequest updateBookRequest) {
-    var book = BookRestMapper.mapUpdateBookRequestToBook(updateBookRequest);
+      final @RequestBody @Valid UpdateBookRequest updateBookRequest,
+      final @PathVariable("bookId") String bookId) {
+    var book = BookRestMapper.mapUpdateBookRequestToBook(updateBookRequest, bookId);
     boolean wasAcknowledged = bookService.updateBook(book);
     if (wasAcknowledged) {
-      var updatedBook = bookService.retrieveBookById(updateBookRequest.getId());
+      var updatedBook = bookService.retrieveBookById(bookId);
       return new ResponseEntity<>(BookRestMapper.mapBookToBookResponse(updatedBook), HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);

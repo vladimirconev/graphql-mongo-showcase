@@ -1,5 +1,6 @@
 package com.example.graphqlshowcase.adapter.in.dto.request;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.Valid;
@@ -10,10 +11,8 @@ import lombok.Data;
 @Data
 public class UpdateBookRequest implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 4656640694464246801L;
-
-  @NotNull(message = "Id can not be null.")
-  private String id;
 
   @NotNull(message = "ISBN can not be null.")
   private String isbn;

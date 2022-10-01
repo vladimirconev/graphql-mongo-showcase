@@ -6,12 +6,14 @@ import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
 import com.example.graphqlshowcase.domain.valueobject.Publisher;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class BookService implements BookDomainService {
 
   private final BookRepository bookRepository;
+
+  public BookService(final BookRepository bookRepository) {
+    this.bookRepository = bookRepository;
+  }
 
   @Override
   public Book createBook(

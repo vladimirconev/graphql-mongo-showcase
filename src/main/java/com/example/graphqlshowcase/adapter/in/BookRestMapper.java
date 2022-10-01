@@ -49,12 +49,13 @@ public class BookRestMapper {
     return addressResponse;
   }
 
-  public static Book mapUpdateBookRequestToBook(final UpdateBookRequest bookRequest) {
+  public static Book mapUpdateBookRequestToBook(
+      final UpdateBookRequest bookRequest, final String bookId) {
     var isbn = new ISBN(bookRequest.getIsbn());
     var genre = Genre.valueOf(bookRequest.getGenre());
     List<Author> authors = mapAuthorRequestsToAuthors(bookRequest.getAuthors());
     return new Book(
-        bookRequest.getId(),
+        bookId,
         bookRequest.getTitle(),
         isbn,
         authors,

@@ -40,7 +40,7 @@ public class GraphQLBookRestController {
   private void checkErrors(final List<GraphQLError> errors) {
     if (!CollectionUtils.isEmpty(errors)) {
       throw new IllegalStateException(
-              errors.stream().map(GraphQLError::getMessage).collect(Collectors.joining("\r\n")));
+          errors.stream().map(GraphQLError::getMessage).collect(Collectors.joining("\r\n")));
     }
   }
 }
