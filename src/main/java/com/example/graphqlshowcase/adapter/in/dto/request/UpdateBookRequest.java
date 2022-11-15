@@ -11,8 +11,7 @@ import lombok.Data;
 @Data
 public class UpdateBookRequest implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 4656640694464246801L;
+  @Serial private static final long serialVersionUID = 4656640694464246801L;
 
   @NotNull(message = "ISBN can not be null.")
   private String isbn;

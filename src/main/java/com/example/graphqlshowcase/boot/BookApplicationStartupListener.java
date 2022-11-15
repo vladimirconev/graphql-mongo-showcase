@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
- * Startup listener to load simple dummy data in MongoDB if 'initialDataLoad' is set to True.
+ * Startup listener to load simple dummy data in Mongo DB if 'initialDataLoad' is set to True.
  *
  * @author Vladimir.Conev
  */

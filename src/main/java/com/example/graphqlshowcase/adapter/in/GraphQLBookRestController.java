@@ -26,7 +26,7 @@ public class GraphQLBookRestController {
   }
 
   @PostMapping(value = "/graphql/books")
-  public ResponseEntity<?> retrieveAssessmentSummaries(@RequestBody Map<String, Object> body) {
+  public ResponseEntity<?> retrieveBooks(@RequestBody Map<String, Object> body) {
     @SuppressWarnings("unchecked")
     final Map<String, Object> variables = (Map<String, Object>) body.get(VARIABLES);
     final String query = (String) body.get(QUERY);
