@@ -75,7 +75,7 @@ class BookApplicationTest {
     var payload = new HashMap<String, Object>();
     payload.putIfAbsent(
         "query",
-            """
+        """
                     query GetAllBooks (
                         $size:Int!,\s
                         $offset:Int!) {
