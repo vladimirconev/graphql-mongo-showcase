@@ -1,17 +1,13 @@
 package com.example.graphqlshowcase.adapter.out.db.dto;
 
+import java.io.Serial;
 import java.io.Serializable;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 public class AuthorMongo implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = -5174940638387804658L;
 
   private String firstName;

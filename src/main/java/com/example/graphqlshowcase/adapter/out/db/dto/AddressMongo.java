@@ -1,17 +1,13 @@
 package com.example.graphqlshowcase.adapter.out.db.dto;
 
+import java.io.Serial;
 import java.io.Serializable;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 public class AddressMongo implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = -2938052011869723591L;
 
   private String city;
