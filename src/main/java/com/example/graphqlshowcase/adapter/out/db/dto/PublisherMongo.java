@@ -7,8 +7,7 @@ import lombok.*;
 @Data
 public class PublisherMongo implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -1360153551725166756L;
+  @Serial private static final long serialVersionUID = -1360153551725166756L;
 
   private String name;
 

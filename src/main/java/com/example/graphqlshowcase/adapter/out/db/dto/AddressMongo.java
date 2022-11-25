@@ -7,8 +7,7 @@ import lombok.*;
 @Data
 public class AddressMongo implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -2938052011869723591L;
+  @Serial private static final long serialVersionUID = -2938052011869723591L;
 
   private String city;
 

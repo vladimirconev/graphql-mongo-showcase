@@ -11,8 +11,7 @@ import org.springframework.data.annotation.Id;
 @Data
 public class BookMongo implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 5879593082798937046L;
+  @Serial private static final long serialVersionUID = 5879593082798937046L;
 
   @Id private String id;
 
