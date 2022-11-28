@@ -8,18 +8,54 @@ import com.example.graphqlshowcase.adapter.in.GraphQLBookRestController;
 import com.example.graphqlshowcase.adapter.in.dto.response.BookResponse;
 import com.example.graphqlshowcase.domain.valueobject.Genre;
 import java.util.HashMap;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
+@Testcontainers(disabledWithoutDocker = true)
 class BookApplicationTest {
+
+  @Container
+  private static final MongoDBContainer mongoDBContainer =
+      new MongoDBContainer(DockerImageName.parse("mongo:6.0.1"));
+
+  @DynamicPropertySource
+  static void setProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
+    registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+  }
 
   @Autowired private BookRestController bookRestController;
 
   @Autowired private GraphQLBookRestController graphQLBookRestController;
+
+  @BeforeAll
+  static void setUp() {
+    mongoDBContainer.start();
+  }
+
+  @AfterAll
+  static void tearDown() {
+    mongoDBContainer.close();
+    assertThat(mongoDBContainer.isRunning()).isFalse();
+  }
+
+  @BeforeEach
+  void testIsContainerRunning() {
+    assertThat(mongoDBContainer.isRunning()).isTrue();
+  }
 
   @Test
   void contextLoads() {

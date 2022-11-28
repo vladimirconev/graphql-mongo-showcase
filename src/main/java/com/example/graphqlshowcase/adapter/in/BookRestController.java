@@ -7,11 +7,13 @@ import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponse;
 import com.example.graphqlshowcase.domain.BookDomainService;
 import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import javax.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@Api(
-    tags = {"Books"},
-    value = "/books")
+@Tag(name = "Books")
 public class BookRestController {
 
   private final BookDomainService bookService;
@@ -36,18 +36,27 @@ public class BookRestController {
     this.bookService = bookService;
   }
 
-  @ApiOperation(
-      value = "Retrieve a book by ID",
+  @Operation(
+      summary = "Retrieve a book by ID",
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "OK", response = BookResponse.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResponse.class),
         @ApiResponse(
-            code = 503,
-            message = "Service temporally unavailable",
-            response = ErrorResponse.class)
+            responseCode = "200",
+            description = "OK",
+            content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Not found",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(
+            responseCode = "503",
+            description = "Service temporally unavailable",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
       })
   @GetMapping(path = "/books/{bookId}")
   public ResponseEntity<BookResponse> retrieveBookById(
@@ -56,17 +65,23 @@ public class BookRestController {
     return new ResponseEntity<>(BookRestMapper.mapBookToBookResponse(result), HttpStatus.OK);
   }
 
-  @ApiOperation(
-      value = "Creates a book",
+  @Operation(
+      summary = "Creates a book",
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 201, message = "Created", response = BookResponse.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
         @ApiResponse(
-            code = 503,
-            message = "Service temporally unavailable",
-            response = ErrorResponse.class)
+            responseCode = "201",
+            description = "Created",
+            content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(
+            responseCode = "503",
+            description = "Service temporally unavailable",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
       })
   @PostMapping(
       path = "/books",
@@ -86,19 +101,28 @@ public class BookRestController {
     return new ResponseEntity<>(output, HttpStatus.CREATED);
   }
 
-  @ApiOperation(
-      value = "Update a book info",
+  @Operation(
+      summary = "Update a book info",
       tags = {"Books"})
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "Updated", response = BookResponse.class),
-        @ApiResponse(code = 422, message = "Unprocessable Entity"),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResponse.class),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResponse.class),
         @ApiResponse(
-            code = 503,
-            message = "Service temporally unavailable",
-            response = ErrorResponse.class)
+            responseCode = "200",
+            description = "Updated",
+            content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "422", description = "Unprocessable Entity"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Not found",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(
+            responseCode = "503",
+            description = "Service temporally unavailable",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
       })
   @PutMapping(
       path = "/books/{bookId}",
