@@ -12,6 +12,4 @@ public class BookRestControllerConfig {
   public BookRestController bookRestController(final BookDomainService bookDomainService) {
     return new BookRestController(bookDomainService);
   }
-
-
 }
