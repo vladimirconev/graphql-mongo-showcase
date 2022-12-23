@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0</version>
+		<version>3.0.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -15,13 +15,12 @@
 	<description>Demo project for Spring Boot for explore GraphQL </description>
 	<properties>
 		<java.version>19</java.version>
-		<graphql-java.version>19.2</graphql-java.version>
+		<graphql-java.version>20.0</graphql-java.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<hibernate-validator.version>6.0.13.Final</hibernate-validator.version>
-		<springfox-swagger.version>3.0.0</springfox-swagger.version>
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
 		<fmt-maven-plugin.version>2.19</fmt-maven-plugin.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.0.0</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.0.2</springdoc-openapi-starter-webmvc-ui.version>
 		<testcontainers-mongodb.version>1.17.6</testcontainers-mongodb.version>
 		<testcontainers-junit-jupiter.version>1.17.6</testcontainers-junit-jupiter.version>
 	</properties>
@@ -47,11 +46,6 @@
 			<groupId>com.graphql-java</groupId>
 			<artifactId>graphql-java</artifactId>
 			<version>${graphql-java.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-properties-migrator</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		
 		<dependency>
