@@ -29,7 +29,7 @@ class BookApplicationTest {
 
   @Container
   private static final MongoDBContainer mongoDBContainer =
-      new MongoDBContainer(DockerImageName.parse("mongo:6.0.1"));
+      new MongoDBContainer(DockerImageName.parse("mongo:latest"));
 
   @DynamicPropertySource
   static void setProperties(DynamicPropertyRegistry registry) {
@@ -100,6 +100,7 @@ class BookApplicationTest {
     assertEquals(HttpStatus.OK, bookResponseResponseEntity.getStatusCode());
     var bookResponseUponUpdate = bookResponseResponseEntity.getBody();
 
+    assert bookResponseUponUpdate != null;
     assertNotNull(bookResponseUponUpdate.getTitle());
     assertEquals(bookUpdateRequest.getTitle(), bookResponseUponUpdate.getTitle());
     assertNotNull(bookResponseUponUpdate.getGenre());
