@@ -29,10 +29,10 @@ class BookApplicationTest {
 
   @Container
   private static final MongoDBContainer mongoDBContainer =
-      new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+      new MongoDBContainer(DockerImageName.parse("mongo:latest")).withReuse(true);
 
   @DynamicPropertySource
-  static void setProperties(DynamicPropertyRegistry registry) {
+  static void overrideProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
     registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
   }
