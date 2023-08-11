@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -27,8 +26,7 @@ import org.testcontainers.utility.DockerImageName;
 @Testcontainers(disabledWithoutDocker = true)
 class BookApplicationTest {
 
-  @Container
-  private static final MongoDBContainer mongoDBContainer =
+  static final MongoDBContainer mongoDBContainer =
       new MongoDBContainer(DockerImageName.parse("mongo:latest")).withReuse(true);
 
   @DynamicPropertySource
