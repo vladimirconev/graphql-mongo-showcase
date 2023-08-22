@@ -21,8 +21,8 @@
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
 		<fmt-maven-plugin.version>2.20</fmt-maven-plugin.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.0.4</springdoc-openapi-starter-webmvc-ui.version>
-		<testcontainers-mongodb.version>1.18.3</testcontainers-mongodb.version>
-		<testcontainers-junit-jupiter.version>1.18.3</testcontainers-junit-jupiter.version>
+		<testcontainers-mongodb.version>1.19.0</testcontainers-mongodb.version>
+		<testcontainers-junit-jupiter.version>1.19.0</testcontainers-junit-jupiter.version>
 	</properties>
 	<dependencies>
 		<dependency>
