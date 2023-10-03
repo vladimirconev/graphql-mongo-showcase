@@ -21,7 +21,7 @@ public class GraphQLBookRestController {
 
   private final GraphQL graphQl;
 
-  public GraphQLBookRestController(GraphQL graphQl) {
+  public GraphQLBookRestController(final GraphQL graphQl) {
     this.graphQl = graphQl;
   }
 

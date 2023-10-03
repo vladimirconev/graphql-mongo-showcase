@@ -22,59 +22,55 @@ public class BookRestMapper {
   private BookRestMapper() {}
 
   public static BookResponse mapBookToBookResponse(final Book book) {
-    var bookResponse = new BookResponse();
-    bookResponse.setId(book.id());
-    bookResponse.setGenre(book.genre().name());
-    bookResponse.setIsbn(book.isbn().isbn());
-    bookResponse.setTitle(book.title());
-    bookResponse.setAuthors(mapAuthorsToAuthorResponses(book.authors()));
-    bookResponse.setPublisher(mapPublisherToPublisherResponse(book.publisher()));
-    return bookResponse;
+    return new BookResponse(
+        book.id(),
+        book.isbn().isbn(),
+        book.title(),
+        mapAuthorsToAuthorResponses(book.authors()),
+        book.genre().name(),
+        mapPublisherToPublisherResponse(book.publisher()));
   }
 
   private static PublisherResponse mapPublisherToPublisherResponse(final Publisher publisher) {
-    var publisherResponse = new PublisherResponse();
-    publisherResponse.setName(publisher.name());
-    publisherResponse.setAddress(mapAddressToAddressResponse(publisher.address()));
-    return publisherResponse;
+    return new PublisherResponse(
+        publisher.name(), mapAddressToAddressResponse(publisher.address()));
   }
 
   private static AddressResponse mapAddressToAddressResponse(final Address address) {
-    var addressResponse = new AddressResponse();
-    addressResponse.setCity(address.city());
-    addressResponse.setHouseNumber(address.houseNumber());
-    addressResponse.setState(address.state());
-    addressResponse.setStreet(address.street());
-    addressResponse.setZipCode(address.zipCode());
-    return addressResponse;
+    return new AddressResponse(
+        address.state(),
+        address.city(),
+        address.houseNumber(),
+        address.street(),
+        address.zipCode());
   }
 
   public static Book mapUpdateBookRequestToBook(
       final UpdateBookRequest bookRequest, final String bookId) {
-    var isbn = new ISBN(bookRequest.getIsbn());
-    var genre = Genre.valueOf(bookRequest.getGenre());
-    List<Author> authors = mapAuthorRequestsToAuthors(bookRequest.getAuthors());
+    var isbn = new ISBN(bookRequest.isbn());
+    var genre = Genre.valueOf(bookRequest.genre());
+    List<Author> authors = mapAuthorRequestsToAuthors(bookRequest.authors());
     return new Book(
         bookId,
-        bookRequest.getTitle(),
+        bookRequest.title(),
         isbn,
         authors,
         genre,
-        mapPublisherRequestToPublisher(bookRequest.getPublisher()));
+        mapPublisherRequestToPublisher(bookRequest.publisher()));
   }
 
   public static Publisher mapPublisherRequestToPublisher(final PublisherRequest publisherRequest) {
     return new Publisher(
-        publisherRequest.getName(), mapAddressRequestToAddress(publisherRequest.getAddress()));
+        publisherRequest.name(), mapAddressRequestToAddress(publisherRequest.address()));
   }
 
   private static Address mapAddressRequestToAddress(final AddressRequest addressRequest) {
     return new Address(
-        addressRequest.getHouseNumber(),
-        addressRequest.getState(),
-        addressRequest.getCity(),
-        addressRequest.getZipCode(),
-        addressRequest.getStreet());
+        addressRequest.houseNumber(),
+        addressRequest.state(),
+        addressRequest.city(),
+        addressRequest.zipCode(),
+        addressRequest.street());
   }
 
   public static List<Author> mapAuthorRequestsToAuthors(final List<AuthorRequest> authorRequests) {
@@ -84,8 +80,7 @@ public class BookRestMapper {
   }
 
   private static Author mapAuthorRequestToAuthor(final AuthorRequest authorRequest) {
-    return new Author(
-        authorRequest.getFirstName(), authorRequest.getLastName(), authorRequest.getEmail());
+    return new Author(authorRequest.firstName(), authorRequest.lastName(), authorRequest.email());
   }
 
   private static List<AuthorResponse> mapAuthorsToAuthorResponses(final List<Author> authors) {
@@ -95,10 +90,6 @@ public class BookRestMapper {
   }
 
   private static AuthorResponse mapAuthorToAuthorResponse(final Author author) {
-    var authorResponse = new AuthorResponse();
-    authorResponse.setEmail(author.email());
-    authorResponse.setFirstName(author.firstName());
-    authorResponse.setLastName(author.lastName());
-    return authorResponse;
+    return new AuthorResponse(author.firstName(), author.lastName(), author.email());
   }
 }

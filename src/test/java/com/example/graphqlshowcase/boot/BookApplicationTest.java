@@ -71,11 +71,11 @@ class BookApplicationTest {
     assertNotNull(responseEntity.getBody());
     assertThat(responseEntity.getBody()).isInstanceOf(BookResponse.class);
     var bookResponse = responseEntity.getBody();
-    assertNotNull(bookResponse.getId());
-    assertEquals(bookResponse.getIsbn(), createBookRequest.getIsbn());
-    assertEquals(bookResponse.getGenre(), createBookRequest.getGenre());
+    assertNotNull(bookResponse.id());
+    assertEquals(bookResponse.isbn(), createBookRequest.isbn());
+    assertEquals(bookResponse.genre(), createBookRequest.genre());
 
-    var bookByIdResponseEntity = bookRestController.retrieveBookById(bookResponse.getId());
+    var bookByIdResponseEntity = bookRestController.retrieveBookById(bookResponse.id());
     assertEquals(HttpStatus.OK, bookByIdResponseEntity.getStatusCode());
     assertEquals(responseEntity.getBody(), bookByIdResponseEntity.getBody());
   }
@@ -90,7 +90,7 @@ class BookApplicationTest {
     assertNotNull(responseEntity.getBody());
 
     var bookResponse = responseEntity.getBody();
-    var bookId = bookResponse.getId();
+    var bookId = bookResponse.id();
     var bookUpdateRequest =
         TestObjects.updateBookRequestByTitleAndGenre("TEST_UPDATE", Genre.FANTASY.name());
 
@@ -99,10 +99,10 @@ class BookApplicationTest {
     var bookResponseUponUpdate = bookResponseResponseEntity.getBody();
 
     assert bookResponseUponUpdate != null;
-    assertNotNull(bookResponseUponUpdate.getTitle());
-    assertEquals(bookUpdateRequest.getTitle(), bookResponseUponUpdate.getTitle());
-    assertNotNull(bookResponseUponUpdate.getGenre());
-    assertEquals(bookUpdateRequest.getGenre(), bookResponseUponUpdate.getGenre());
+    assertNotNull(bookResponseUponUpdate.title());
+    assertEquals(bookUpdateRequest.title(), bookResponseUponUpdate.title());
+    assertNotNull(bookResponseUponUpdate.genre());
+    assertEquals(bookUpdateRequest.genre(), bookResponseUponUpdate.genre());
   }
 
   @Test

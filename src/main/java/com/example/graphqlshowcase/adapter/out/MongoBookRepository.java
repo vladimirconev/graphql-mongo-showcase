@@ -8,7 +8,7 @@ import com.example.graphqlshowcase.domain.valueobject.Genre;
 import com.example.graphqlshowcase.domain.valueobject.ISBN;
 import com.example.graphqlshowcase.domain.valueobject.Publisher;
 import com.mongodb.client.result.UpdateResult;
-import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,17 +37,17 @@ public class MongoBookRepository implements BookRepository {
       final String title,
       final List<Author> authors,
       final Publisher publisher) {
-    var savedBook =
-        mongoOperations.save(
-            BookMongo.builder()
-                .genre(genre.name())
-                .title(title)
-                .isbn(isbn.isbn())
-                .authors(BookDbMapper.mapAuthorsToAuthorMongoDtos(authors))
-                .publisher(BookDbMapper.mapPublisherToPublisherMongo(publisher))
-                .creationDate(LocalDateTime.now(Clock.systemUTC()))
-                .build(),
-            BOOKS_COLLECTION_NAME);
+    var bookMongo =
+        new BookMongo(
+            null,
+            isbn.isbn(),
+            genre.name(),
+            title,
+            BookDbMapper.mapAuthorsToAuthorMongoDtos(authors),
+            BookDbMapper.mapPublisherToPublisherMongo(publisher),
+            Instant.now(),
+            Instant.now());
+    var savedBook = mongoOperations.save(bookMongo, BOOKS_COLLECTION_NAME);
     return BookDbMapper.mapBookMongoToBook(savedBook);
   }
 

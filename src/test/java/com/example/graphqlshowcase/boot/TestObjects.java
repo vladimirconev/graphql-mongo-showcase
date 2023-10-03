@@ -9,54 +9,18 @@ public final class TestObjects {
   private TestObjects() {}
 
   public static CreateBookRequest createBookRequest() {
-    var createRequestPayload = new CreateBookRequest();
-    createRequestPayload.setTitle("TEST");
-    createRequestPayload.setIsbn("978-1-891830-25-9");
-    createRequestPayload.setGenre(Genre.SCI_FI.name());
-    var publisher = new PublisherRequest();
-    publisher.setName("PEARSON");
-    var address = new AddressRequest();
-    address.setCity("London");
-    address.setStreet("88 Park Road");
-    address.setZipCode("EC1A");
-    address.setState("United Kingdom");
-    address.setHouseNumber("23A");
-    publisher.setAddress(address);
-
-    createRequestPayload.setPublisher(publisher);
-
-    var author = new AuthorRequest();
-    author.setEmail("elaine.bloyd@pearson.com");
-    author.setFirstName("Elaine");
-    author.setLastName("Bloyd");
-    createRequestPayload.setAuthors(List.of(author));
-
-    return createRequestPayload;
+    var address = new AddressRequest("88 Park Road", "23A", "London", "United Kingdom", "EC1A");
+    var author = new AuthorRequest("Elaine", "Bloyd", "elaine.bloyd@pearson.com");
+    var publisher = new PublisherRequest("PEARSON", address);
+    return new CreateBookRequest(
+        "978-1-891830-25-9", "TEST", List.of(author), Genre.SCI_FI.name(), publisher);
   }
 
   public static UpdateBookRequest updateBookRequestByTitleAndGenre(
       final String title, final String genre) {
-    var updateBookRequest = new UpdateBookRequest();
-    updateBookRequest.setTitle(title);
-    updateBookRequest.setGenre(genre);
-    updateBookRequest.setIsbn("978-1-891830-25-9");
-    var publisher = new PublisherRequest();
-    publisher.setName("PEARSON");
-    var address = new AddressRequest();
-    address.setCity("London");
-    address.setStreet("88 Park Road");
-    address.setZipCode("EC1A");
-    address.setState("United Kingdom");
-    address.setHouseNumber("23A");
-    publisher.setAddress(address);
-    updateBookRequest.setPublisher(publisher);
-
-    var author = new AuthorRequest();
-    author.setEmail("elaine.bloyd@pearson.com");
-    author.setFirstName("Elaine");
-    author.setLastName("Bloyd");
-    updateBookRequest.setAuthors(List.of(author));
-
-    return updateBookRequest;
+    var author = new AuthorRequest("Elaine", "Bloyd", "elaine.bloyd@pearson.com");
+    var address = new AddressRequest("88 Park Road", "23A", "London", "United Kingdom", "EC1A");
+    var publisher = new PublisherRequest("PEARSON", address);
+    return new UpdateBookRequest("978-1-891830-25-9", title, List.of(author), genre, publisher);
   }
 }

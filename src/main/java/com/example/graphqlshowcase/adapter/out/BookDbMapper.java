@@ -23,11 +23,7 @@ public class BookDbMapper {
   }
 
   private static AuthorMongo mapAuthorToAuthorMongo(final Author author) {
-    var authorMongoDto = new AuthorMongo();
-    authorMongoDto.setEmail(author.email());
-    authorMongoDto.setFirstName(author.firstName());
-    authorMongoDto.setLastName(author.lastName());
-    return authorMongoDto;
+    return new AuthorMongo(author.firstName(), author.lastName(), author.email());
   }
 
   private static List<Author> mapAuthorMongoDtosToAuthors(final Set<AuthorMongo> authorMongos) {
@@ -37,57 +33,42 @@ public class BookDbMapper {
   }
 
   private static Author mapAuthorMongoToAuthor(final AuthorMongo authorMongo) {
-    return new Author(
-        authorMongo.getFirstName(), authorMongo.getLastName(), authorMongo.getEmail());
+    return new Author(authorMongo.firstName(), authorMongo.lastName(), authorMongo.email());
   }
 
   public static Book mapBookMongoToBook(final BookMongo bookMongo) {
     return new Book(
-        bookMongo.getId(),
-        bookMongo.getTitle(),
-        new ISBN(bookMongo.getIsbn()),
-        mapAuthorMongoDtosToAuthors(bookMongo.getAuthors()),
-        Genre.valueOf(bookMongo.getGenre()),
-        mapPublisherMongoDtoToPublisher(bookMongo.getPublisher()));
+        bookMongo.id(),
+        bookMongo.title(),
+        new ISBN(bookMongo.isbn()),
+        mapAuthorMongoDtosToAuthors(bookMongo.authors()),
+        Genre.valueOf(bookMongo.genre()),
+        mapPublisherMongoDtoToPublisher(bookMongo.publisher()));
   }
 
   private static Publisher mapPublisherMongoDtoToPublisher(final PublisherMongo publisherMongo) {
-    return new Publisher(
-        publisherMongo.getName(), mapAddressMongoToAddress(publisherMongo.getAddress()));
+    return new Publisher(publisherMongo.name(), mapAddressMongoToAddress(publisherMongo.address()));
   }
 
   private static Address mapAddressMongoToAddress(final AddressMongo addressMongo) {
     return new Address(
-        addressMongo.getHouseNumber(),
-        addressMongo.getState(),
-        addressMongo.getCity(),
-        addressMongo.getZipCode(),
-        addressMongo.getStreet());
-  }
-
-  public static BookMongo mapBookToBookMongO(final Book book) {
-    return BookMongo.builder()
-        .genre(book.genre().name())
-        .authors(null)
-        .title(book.title())
-        .isbn(book.isbn().isbn())
-        .build();
+        addressMongo.houseNumber(),
+        addressMongo.state(),
+        addressMongo.city(),
+        addressMongo.zipCode(),
+        addressMongo.street());
   }
 
   public static PublisherMongo mapPublisherToPublisherMongo(final Publisher publisher) {
-    var publisherMongo = new PublisherMongo();
-    publisherMongo.setName(publisher.name());
-    publisherMongo.setAddress(mapAddressToAddressMongo(publisher.address()));
-    return publisherMongo;
+    return new PublisherMongo(publisher.name(), mapAddressToAddressMongo(publisher.address()));
   }
 
   private static AddressMongo mapAddressToAddressMongo(final Address address) {
-    var addressMongo = new AddressMongo();
-    addressMongo.setCity(address.city());
-    addressMongo.setHouseNumber(address.houseNumber());
-    addressMongo.setState(address.state());
-    addressMongo.setStreet(address.street());
-    addressMongo.setZipCode(address.zipCode());
-    return addressMongo;
+    return new AddressMongo(
+        address.city(),
+        address.state(),
+        address.houseNumber(),
+        address.zipCode(),
+        address.street());
   }
 }

@@ -32,7 +32,7 @@ public class BookRestController {
 
   private final BookDomainService bookService;
 
-  public BookRestController(BookDomainService bookService) {
+  public BookRestController(final BookDomainService bookService) {
     this.bookService = bookService;
   }
 
@@ -89,14 +89,14 @@ public class BookRestController {
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<BookResponse> createBook(
       final @RequestBody @Valid CreateBookRequest createBookRequest) {
-    var authors = BookRestMapper.mapAuthorRequestsToAuthors(createBookRequest.getAuthors());
+    var authors = BookRestMapper.mapAuthorRequestsToAuthors(createBookRequest.authors());
     var createdBook =
         bookService.createBook(
-            new ISBN(createBookRequest.getIsbn()),
-            Genre.valueOf(createBookRequest.getGenre()),
-            createBookRequest.getTitle(),
+            new ISBN(createBookRequest.isbn()),
+            Genre.valueOf(createBookRequest.genre()),
+            createBookRequest.title(),
             authors,
-            BookRestMapper.mapPublisherRequestToPublisher(createBookRequest.getPublisher()));
+            BookRestMapper.mapPublisherRequestToPublisher(createBookRequest.publisher()));
     var output = BookRestMapper.mapBookToBookResponse(createdBook);
     return new ResponseEntity<>(output, HttpStatus.CREATED);
   }

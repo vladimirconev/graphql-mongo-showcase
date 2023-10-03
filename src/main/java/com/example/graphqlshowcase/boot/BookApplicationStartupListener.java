@@ -8,7 +8,6 @@ import com.example.graphqlshowcase.domain.valueobject.ISBN;
 import com.example.graphqlshowcase.domain.valueobject.Publisher;
 import java.util.List;
 import java.util.Random;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -17,11 +16,16 @@ import org.springframework.context.event.ContextRefreshedEvent;
  *
  * @author Vladimir.Conev
  */
-@RequiredArgsConstructor
 public class BookApplicationStartupListener implements ApplicationListener<ContextRefreshedEvent> {
 
   private final Boolean initialDataLoad;
   private final BookRepository bookRepository;
+
+  public BookApplicationStartupListener(
+      final Boolean initialDataLoad, final BookRepository bookRepository) {
+    this.initialDataLoad = initialDataLoad;
+    this.bookRepository = bookRepository;
+  }
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
