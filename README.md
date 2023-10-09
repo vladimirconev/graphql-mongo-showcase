@@ -2,7 +2,7 @@
 This is а simple show-case where we have exposed simple REST API but at some point stakeholders wants a data grid with pagination (displaying  minor subset of properties). GraphQL makes it super easy to implement this requirement with a lot of flexibility so API consumers can pick which fields want to be served as long as they are supported and defined in the GraphQL schema.
 
 # Setup 
-- JDK 19 as baseline  
+- JDK 21 as baseline 
 - Maven 
 - MongoDB v4.4 (https://www.mongodb.com/try/download/community)
 - Postman as nice to have  (https://www.postman.com/)
