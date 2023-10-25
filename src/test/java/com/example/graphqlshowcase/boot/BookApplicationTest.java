@@ -20,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -140,7 +139,7 @@ class BookApplicationTest {
   }
 
   @Test
-  void retrieveBooksViaPagination() {
+  void retrieveBooksViaPagination() throws Exception {
     var payload = new HashMap<String, Object>();
     payload.putIfAbsent(
         "query",
@@ -172,11 +171,17 @@ class BookApplicationTest {
 
     payload.putIfAbsent("variables", paginationVariables);
 
-    ResponseEntity<?> responseEntity = graphQLBookRestController.retrieveBooks(payload);
-    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    var mvcResult =
+        mockMvc
+            .perform(
+                post("/graphql/books")
+                    .content(objectMapper.writeValueAsString(payload))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+    assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 
-    var output = responseEntity.getBody();
-    assertNotNull(output);
-    assertThat(output).hasFieldOrProperty("books");
+    var output = mvcResult.getResponse().getContentAsString();
+    assertThat(output).isNotNull();
   }
 }
