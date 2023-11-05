@@ -4,6 +4,7 @@ import com.example.graphqlshowcase.adapter.in.dto.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -62,7 +64,7 @@ public class RestExceptionHandler {
 
     var message =
         Optional.ofNullable(messageDetails)
-            .orElse(Optional.ofNullable(errors.get("message")).map(Object::toString).orElse(null));
+            .orElse(Optional.ofNullable(errors.get("message")).map(Object::toString).orElse(""));
     var path =
         Optional.ofNullable(errors.get("path"))
             .map(Object::toString)
@@ -106,6 +108,13 @@ public class RestExceptionHandler {
   }
 
   @ResponseBody
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+      final MissingServletRequestParameterException ex, final WebRequest webRequest) {
+    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
+  }
+
+  @ResponseBody
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupported(
       final HttpRequestMethodNotSupportedException ex, final WebRequest request) {
@@ -125,7 +134,19 @@ public class RestExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   protected ResponseEntity<ErrorResponse> handleNMethodArgumentNotValidException(
       final MethodArgumentNotValidException ex, final WebRequest webRequest) {
-    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
+    var fieldErrors = ex.getFieldErrors();
+    var message =
+        fieldErrors.stream()
+            .map(
+                fieldError ->
+                    "Validation failed for field '%s' with rejected value '%s' due to: '%s'"
+                        .formatted(
+                            fieldError.getField(),
+                            fieldError.getRejectedValue(),
+                            fieldError.getDefaultMessage()))
+            .collect(Collectors.joining(System.lineSeparator()));
+    var detailedMessage = Optional.of(message).orElse(ex.getMessage());
+    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, detailedMessage);
   }
 
   @ResponseBody
