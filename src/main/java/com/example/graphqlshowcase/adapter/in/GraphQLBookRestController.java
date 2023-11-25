@@ -7,6 +7,8 @@ import graphql.GraphQLError;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Books GraphQL")
 public class GraphQLBookRestController {
 
   private static final String QUERY = "query";

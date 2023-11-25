@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-@RestControllerAdvice(basePackageClasses = BookRestController.class)
+@RestControllerAdvice(basePackages = "com.example.graphqlshowcase.adapter.in")
 public class RestExceptionHandler {
 
   private final DefaultErrorAttributes errorAttributes;
