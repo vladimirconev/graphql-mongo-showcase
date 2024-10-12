@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.3</version>
+		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -14,15 +14,15 @@
 	<name>graphql-showcase</name>
 	<description>Demo project for Spring Boot for explore GraphQL </description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>23</java.version>
 		<graphql-java.version>22.3</graphql-java.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<hibernate-validator.version>6.0.13.Final</hibernate-validator.version>
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
-		<fmt-maven-plugin.version>2.24</fmt-maven-plugin.version>
+		<fmt-maven-plugin.version>2.25</fmt-maven-plugin.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
-		<testcontainers-mongodb.version>1.20.1</testcontainers-mongodb.version>
-		<testcontainers-junit-jupiter.version>1.20.1</testcontainers-junit-jupiter.version>
+		<testcontainers-mongodb.version>1.20.2</testcontainers-mongodb.version>
+		<testcontainers-junit-jupiter.version>1.20.2</testcontainers-junit-jupiter.version>
 	</properties>
 	<dependencies>
 		<dependency>
